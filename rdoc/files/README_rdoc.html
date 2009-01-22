@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu Jan 22 16:45:44 +0100 2009</td>
+      <td>Thu Jan 22 16:58:04 +0100 2009</td>
     </tr>
     </table>
   </div>
@@ -69,12 +69,12 @@
   <div id="contextContent">
 
     <div id="description">
-      <h1>`acts_as_solr` Rails plugin</h1>
+      <h1>acts_as_solr Rails plugin</h1>
 <p>
 This plugin adds full text search capabilities and many other nifty
-features from Apache&#8216;s [Solr](<a
-href="http://lucene.apache.org/solr">lucene.apache.org/solr</a>/) to any
-Rails model. It was based on the first draft by Erik Hatcher.
+features from Apache&#8216;s <a
+href="http://lucene.apache.org/solr/">Solr</a> to any Rails model. It was
+based on the first draft by Erik Hatcher.
 </p>
 <h2>Current Release</h2>
 <p>
@@ -158,26 +158,24 @@ for a complete info
 </p>
 <h2>acts_as_solr in your tests</h2>
 <p>
-To test code that uses `acts_as_solr` you must start a Solr server for the
-test environment. You can do that with `rake solr:start RAILS_ENV=test`
+To test code that uses acts_as_solr you must start a Solr server for the
+test environment. You can do that with
 </p>
+<pre>
+    rake solr:start RAILS_ENV=test
+</pre>
 <p>
 However, if you would like to mock out Solr calls so that a Solr server is
 not needed (and your tests will run much faster), just add this to your
 `test_helper.rb` or similar:
 </p>
-<p>
-&lt;pre&gt;&lt;code&gt; class <a
-href="../classes/ActsAsSolr/Post.html">ActsAsSolr::Post</a>
-</p>
 <pre>
-  def self.execute(request)
-    true
-  end
+    class ActsAsSolr::Post
+      def self.execute(request)
+        true
+      end
+    end
 </pre>
-<p>
-end &lt;/pre&gt;&lt;/code&gt;
-</p>
 <p>
 (<a
 href="http://www.subelsky.com/2007/10/actsassolr-capistranhttpwwwbloggercomim.html#c1646308013209805416">via</a>)
