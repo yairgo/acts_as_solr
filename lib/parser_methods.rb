@@ -1,6 +1,6 @@
 module ActsAsSolr #:nodoc:
   module ParserMethods
-    protected    
+    protected
     
     # Method used by mostly all the ClassMethods when doing a search
     def parse_query(query=nil, options={}, models=nil)
