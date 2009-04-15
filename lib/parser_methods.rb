@@ -86,7 +86,7 @@ module ActsAsSolr #:nodoc:
     end
     
     def solr_type_condition
-      subclasses.inject("(#{solr_configuration[:type_field]}:#{self.name}") do |condition, subclass|
+      subclasses.inject("(#{solr_configuration[:type_field]}:#{klass.name}") do |condition, subclass|
         condition << " OR #{solr_configuration[:type_field]}:#{subclass.name}"
       end << ')'
     end
@@ -106,7 +106,7 @@ module ActsAsSolr #:nodoc:
       
       configuration.update(options) if options.is_a?(Hash)
 
-      ids = solr_data.hits.collect {|doc| doc["#{solr_configuration[:primary_key_field]}"]}.flatten
+      ids = solr_data.hits.collect {|doc| doc["#{klass.solr_configuration[:primary_key_field]}"]}.flatten
       
       result = find_objects(ids, options, configuration)
       
@@ -148,8 +148,8 @@ module ActsAsSolr #:nodoc:
     # on the acts_as_solr call
     def replace_types(strings, include_colon=true)
       suffix = include_colon ? ":" : ""
-      if configuration[:solr_fields]
-        configuration[:solr_fields].each do |name, options|
+      if klass.configuration[:solr_fields]
+        klass.configuration[:solr_fields].each do |name, options|
           solr_name = options[:as] || name.to_s
           solr_type = get_solr_field_type(options[:type])
           field = "#{solr_name}_#{solr_type}#{suffix}"
@@ -181,7 +181,7 @@ module ActsAsSolr #:nodoc:
     end
     
     def scorable_record?(record, doc)
-      doc_id = doc["#{solr_configuration[:primary_key_field]}"]
+      doc_id = doc["#{klass.solr_configuration[:primary_key_field]}"]
       if doc_id.nil?
         doc_id = doc["id"]
         "#{record.class.name}:#{record_id(record)}" == doc_id.first.to_s

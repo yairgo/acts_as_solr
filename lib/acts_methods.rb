@@ -163,8 +163,6 @@ module ActsAsSolr #:nodoc:
     def acts_as_solr(options={}, solr_options={})
       extend ClassMethods
       include InstanceMethods
-      include CommonMethods
-      include ParserMethods
       
       cattr_accessor :solr_configuration
       class << self
