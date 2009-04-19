@@ -165,10 +165,6 @@ module ActsAsSolr #:nodoc:
       include InstanceMethods
       
       cattr_accessor :solr_configuration
-      class << self
-        alias_method :configuration, :solr_configuration
-      end
-      alias_method :configuration, :solr_configuration
       
       self.solr_configuration = Configuration.new(self, options.merge(solr_options))
     end

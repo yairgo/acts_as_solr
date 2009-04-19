@@ -148,16 +148,16 @@ module ActsAsSolr #:nodoc:
     # on the acts_as_solr call
     def replace_types(strings, include_colon=true)
       suffix = include_colon ? ":" : ""
-      if klass.configuration[:solr_fields]
-        klass.configuration[:solr_fields].each do |name, options|
+      if klass.solr_configuration[:solr_fields]
+        klass.solr_configuration[:solr_fields].each do |name, options|
           solr_name = options[:as] || name.to_s
           solr_type = get_solr_field_type(options[:type])
           field = "#{solr_name}_#{solr_type}#{suffix}"
           strings.each_with_index {|s,i| strings[i] = s.gsub(/#{solr_name.to_s}_t#{suffix}/,field) }
         end
       end
-      if configuration[:solr_includes]
-        configuration[:solr_includes].each do |association, options|
+      if solr_configuration[:solr_includes]
+        solr_configuration[:solr_includes].each do |association, options|
           solr_name = options[:as] || association.to_s.singularize
           solr_type = get_solr_field_type(options[:type])
           field = "#{solr_name}_#{solr_type}#{suffix}"

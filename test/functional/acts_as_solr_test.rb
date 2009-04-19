@@ -26,7 +26,7 @@ class ActsAsSolrTest < Test::Unit::TestCase
   end
 
   def test_type_determined_from_database_if_not_explicitly_set
-    assert Post.configuration[:solr_fields][:posted_at][:type] == :date
+    assert Post.solr_configuration[:solr_fields][:posted_at][:type] == :date
   end
   
   def test_search_includes_subclasses

@@ -13,14 +13,14 @@ module ActsAsSolr
     def to_solr_doc
       logger.debug "to_solr_doc: creating doc for class: #{object.class.name}, id: #{record_id(object)}"
       doc = Solr::Document.new
-      doc.boost = validate_boost(configuration[:boost]) if configuration[:boost]
+      doc.boost = validate_boost(solr_configuration[:boost]) if solr_configuration[:boost]
       
       doc << {:id => solr_id,
               solr_configuration[:type_field] => object.class.name,
               solr_configuration[:primary_key_field] => record_id(object).to_s}
 
       # iterate through the fields and add them to the document,
-      configuration[:solr_fields].each do |field_name, options|
+      solr_configuration[:solr_fields].each do |field_name, options|
         #field_type = configuration[:facets] && configuration[:facets].include?(field) ? :facet : :text
         
         field_boost = options[:boost] || solr_configuration[:default_boost]
@@ -55,7 +55,7 @@ module ActsAsSolr
     end
     
     def indexing_disabled?
-      evaluate_condition(:offline, object) || !configuration[:if]
+      evaluate_condition(:offline, object) || !solr_configuration[:if]
     end
 
     def save
@@ -63,7 +63,7 @@ module ActsAsSolr
       if evaluate_condition(:if, object) 
         logger.debug "solr_save: #{object.class.name} : #{record_id(object)}"
         solr_add to_solr_doc
-        solr_commit if configuration[:auto_commit]
+        solr_commit if solr_configuration[:auto_commit]
         true
       else
         solr_destroy
@@ -74,7 +74,7 @@ module ActsAsSolr
       return true if indexing_disabled?
       logger.debug "solr_destroy: #{object.class.name} : #{record_id(object)}"
       solr_delete solr_id
-      solr_commit if configuration[:auto_commit]
+      solr_commit if solr_configuration[:auto_commit]
       true
     end
     
@@ -89,8 +89,8 @@ module ActsAsSolr
     private
     
     def add_includes(doc)
-      if configuration[:solr_includes].respond_to?(:each)
-        configuration[:solr_includes].each do |association, options|
+      if solr_configuration[:solr_includes].respond_to?(:each)
+        solr_configuration[:solr_includes].each do |association, options|
           data = options[:multivalued] ? [] : ""
           field_name = options[:as] || association.to_s.singularize
           field_type = get_solr_field_type(options[:type])
@@ -148,7 +148,7 @@ module ActsAsSolr
     end
     
     def evaluate_condition(which_condition, field)
-      condition = configuration[which_condition]
+      condition = solr_configuration[which_condition]
       case condition
         when Symbol
           field.send(condition)
