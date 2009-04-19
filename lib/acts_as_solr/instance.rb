@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../common_methods'
+require File.dirname(__FILE__) + '/common_methods'
 
 module ActsAsSolr
   class Instance

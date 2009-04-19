@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/acts_as_solr/index'
+require File.dirname(__FILE__) + '/index'
 
 module ActsAsSolr #:nodoc:
   module ClassMethods

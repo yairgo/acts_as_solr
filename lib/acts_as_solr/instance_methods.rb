@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/acts_as_solr/instance'
+require File.dirname(__FILE__) + '/instance'
 
 module ActsAsSolr #:nodoc:
   
