@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/rebuild'
 require File.dirname(__FILE__) + '/common_methods'
 require File.dirname(__FILE__) + '/parser_methods'
+require File.dirname(__FILE__) + '/facets'
 
 module ActsAsSolr
   class Index
@@ -9,6 +10,7 @@ module ActsAsSolr
     include ParserMethods
     include CommonMethods
     include Rebuild
+    include Facets
     
     def initialize(klass)
       @klass = klass
