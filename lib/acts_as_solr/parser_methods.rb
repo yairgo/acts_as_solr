@@ -174,7 +174,7 @@ module ActsAsSolr #:nodoc:
         with_score.push([doc["score"], 
           results.find {|record| scorable_record?(record, doc) }])
       end
-      with_score.each do |score, object| 
+      with_score.each do |score, object|
         class << object; attr_accessor :solr_score; end
         object.solr_score = score
       end
@@ -182,6 +182,7 @@ module ActsAsSolr #:nodoc:
     
     def scorable_record?(record, doc)
       doc_id = doc["#{klass.solr_configuration[:primary_key_field]}"]
+      doc_id = doc_id.first if doc_id.is_a?(Array)
       if doc_id.nil?
         doc_id = doc["id"]
         "#{record.class.name}:#{record_id(record)}" == doc_id.first.to_s

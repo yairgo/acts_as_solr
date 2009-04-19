@@ -32,8 +32,9 @@ module ActsAsSolr
       if data.nil? or data.total_hits == 0
         return SearchResults.new(:docs => [], :total => 0)
       end
-
+      
       result = find_multi_search_objects(data, options)
+
       if options[:scores] and options[:results_format] == :objects
         add_scores(result, data) 
       end
@@ -63,7 +64,11 @@ module ActsAsSolr
           result << k[0].constantize.find_by_id(k[1])
         end
       elsif options[:results_format] == :ids
-        data.hits.each{|doc| result << {"id" => doc.values.pop.to_s}}
+        data.hits.each do |doc|
+          doc_id = doc.fetch('id')
+          doc_id = doc_id.first if doc_id.is_a?(Array)
+          result << {"id" => doc_id}
+        end
       end
       result
     end
