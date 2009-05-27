@@ -12,33 +12,25 @@
 
 module Solr::XML
 end
-
+require 'rubygems'
 begin
-  
-  # If we can load rubygems and libxml-ruby...
-  require 'rubygems'
-  require 'xml/libxml'
-  raise "acts_as_solr requires libxml-ruby 0.7 or greater" unless XML::Node.public_instance_methods.include?("attributes")
+  gem 'libxml-ruby', '>= 0.7'
+rescue Gem::LoadError => e 
+  use_rexml = true
+end
+require 'xml'
+use_rexml = !XML::Node.public_instance_methods.include?("attributes")
 
-  # then make a few modifications to XML::Node so it can stand in for REXML::Element
+if use_rexml
+  puts "Could Not Load libxml-ruby >= 0.7.\nRequiring REXML"
+  require 'rexml/document'
+  Solr::XML::Element = REXML::Element
+else
   class XML::Node
-    # element.add_element(another_element) should work
-    alias_method :add_element, :<<
-
-
-    # element.text = "blah" should work
-    def text=(x)
+    alias_method :add_element, :<< # element.add_element(another_element) should work
+    def text=(x) # element.text = "blah" should work
       self << x.to_s
     end
   end
-  
-  # And use XML::Node for our XML generation
   Solr::XML::Element = XML::Node
-  
-rescue LoadError => e # If we can't load either rubygems or libxml-ruby
-  puts "Requiring REXML"
-  # Just use REXML.
-  require 'rexml/document'
-  Solr::XML::Element = REXML::Element
-  
 end
